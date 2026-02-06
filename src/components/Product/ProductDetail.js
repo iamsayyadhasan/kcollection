@@ -10,11 +10,14 @@ export default function ProductDetail() {
   const [selectedSize, setSelectedSize] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+
+
   useEffect(() => {
     const fetchProduct = async () => {
       try {
         const res = await fetch(
-          `http://localhost:5000/api/product/get-product-by-slug/${slug}`
+          `${API_BASE_URL}/api/product/get-product-by-slug/${slug}`
         );
         const data = await res.json();
 
@@ -79,7 +82,7 @@ Please guide me further.
   {product.images.map((img, i) => (
     <div key={i} className="bg-gray-100">
       <img
-        src={`http://localhost:5000${img}`}
+        src={`${API_BASE_URL}${img}`}
         alt={product.title}
         className="w-full object-cover"
       />
