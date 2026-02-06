@@ -7,12 +7,15 @@ export default function AdminProductsPage() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
+    const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+
+
   /* FETCH PRODUCTS */
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const res = await fetch(
-          "http://localhost:5000/api/product/get-all-products"
+          `${API_BASE_URL}/api/product/get-all-products`
         );
         const data = await res.json();
         setProducts(data.products || []);
@@ -36,7 +39,7 @@ export default function AdminProductsPage() {
 
     try {
       const res = await fetch(
-        `http://localhost:5000/api/product/delete-product/${id}`,
+        `${API_BASE_URL}/api/product/delete-product/${id}`,
         {
           method: "DELETE",
         }
@@ -119,7 +122,7 @@ export default function AdminProductsPage() {
         product.images?.[0]
           ? product.images[0].startsWith("http")
             ? product.images[0]
-            : `http://localhost:5000${product.images[0]}`
+            : `${API_BASE_URL}${product.images[0]}`
           : "/placeholder.png"
       }
       alt={product.title}

@@ -10,6 +10,8 @@ export default function EditProductPage() {
   const { id } = useParams();
   const router = useRouter();
 
+    const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+
   const [loading, setLoading] = useState(true);
 
   const [formData, setFormData] = useState({
@@ -34,7 +36,7 @@ export default function EditProductPage() {
     const fetchProduct = async () => {
       try {
         const res = await fetch(
-          `http://localhost:5000/api/product/get-product-details/${id}`
+          `${API_BASE_URL}/api/product/get-product-details/${id}`
         );
         const data = await res.json();
 
@@ -139,7 +141,7 @@ export default function EditProductPage() {
 
     try {
       const res = await fetch(
-        `http://localhost:5000/api/product/update-product/${id}`,
+        `${API_BASE_URL}/api/product/update-product/${id}`,
         {
           method: "PUT",
           body: data,

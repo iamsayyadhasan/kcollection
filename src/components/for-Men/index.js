@@ -1,7 +1,7 @@
 import React from 'react'
 import Socialmedia from '../Home/Socialmedia'
-import MenCollectionSection from './Category'
 import Mbanner from './WBanner'
+import MenCollectionSection from './Category'
 
 function Menpage() {
   return (

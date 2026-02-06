@@ -7,6 +7,8 @@ import { useRouter } from "next/navigation";
 /* AVAILABLE SIZES */
 const sizesList = ["XS", "S", "M", "L", "XL", "XXL"];
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+
 export default function AddProductPage() {
   const router = useRouter();
 
@@ -95,7 +97,7 @@ export default function AddProductPage() {
 
     try {
       const res = await fetch(
-        "http://localhost:5000/api/product/add-product",
+        `${API_BASE_URL}/api/product/add-product`,
         {
           method: "POST",
           body: data, // ❌ no headers

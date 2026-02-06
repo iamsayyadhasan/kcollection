@@ -13,6 +13,8 @@ const tabs = [
   "Sale",
 ];
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+
 export default function MenCollectionSection() {
   const [activeTab, setActiveTab] = useState("All");
   const [products, setProducts] = useState([]);
@@ -23,12 +25,11 @@ export default function MenCollectionSection() {
     const fetchProducts = async () => {
       try {
         const res = await fetch(
-          "http://localhost:5000/api/product/get-all-products"
+          `${API_BASE_URL}/api/product/get-all-products`
         );
         const data = await res.json();
 
-        // only MEN products
-        const menProducts = data.products.filter(
+        const menProducts = (data.products || []).filter(
           (item) => item.category === "Men"
         );
 
@@ -43,7 +44,7 @@ export default function MenCollectionSection() {
     fetchProducts();
   }, []);
 
-  /* FILTER LOGIC (UNCHANGED CONCEPT) */
+  /* FILTER LOGIC */
   const filteredProducts =
     activeTab === "All"
       ? products
@@ -90,52 +91,60 @@ export default function MenCollectionSection() {
       ) : (
         /* PRODUCTS GRID */
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {filteredProducts.map((item) => (
-            <Link
-              key={item._id}
-              href={`/products/${item.slug}`}
-              className="group"
-            >
-              <div className="relative overflow-hidden bg-gray-100">
-                {/* BADGES */}
-                {item.isNew && (
-                  <span className="absolute top-2 left-2 bg-black text-white text-xs px-2 py-1 z-10">
-                    New
-                  </span>
-                )}
-                {item.onSale && (
-                  <span className="absolute top-2 right-2 bg-[#B02724] text-white text-xs px-2 py-1 z-10">
-                    Sale
-                  </span>
-                )}
+          {filteredProducts.map((item) => {
+            const image =
+              item.images?.[0] &&
+              (item.images[0].startsWith("http")
+                ? item.images[0]
+                : `${API_BASE_URL}${item.images[0]}`);
 
-                <img
-                  src={item.images?.[0]}
-                  alt={item.title}
-                  className="w-full h-[320px] object-cover group-hover:scale-105 transition duration-300"
-                />
-              </div>
+            return (
+              <Link
+                key={item._id}
+                href={`/products/${item.slug}`}
+                className="group"
+              >
+                <div className="relative overflow-hidden bg-gray-100">
+                  {/* BADGES */}
+                  {item.isNew && (
+                    <span className="absolute top-2 left-2 bg-black text-white text-xs px-2 py-1 z-10">
+                      New
+                    </span>
+                  )}
+                  {item.onSale && (
+                    <span className="absolute top-2 right-2 bg-[#B02724] text-white text-xs px-2 py-1 z-10">
+                      Sale
+                    </span>
+                  )}
 
-              <h3 className="mt-3 text-sm font-medium">
-                {item.title}
-              </h3>
-              <p className="text-xs text-gray-400">
-                {item.brand}
-              </p>
+                  <img
+                    src={image || "/placeholder.png"}
+                    alt={item.title}
+                    className="w-full h-[320px] object-cover group-hover:scale-105 transition duration-300"
+                  />
+                </div>
 
-              {/* PRICE */}
-              <div className="mt-1 flex gap-2 items-center">
-                {item.mrp && item.mrp !== item.price && (
-                  <span className="text-xs text-gray-400 line-through">
-                    Rs. {item.mrp}
+                <h3 className="mt-3 text-sm font-medium">
+                  {item.title}
+                </h3>
+                <p className="text-xs text-gray-400">
+                  {item.brand}
+                </p>
+
+                {/* PRICE */}
+                <div className="mt-1 flex gap-2 items-center">
+                  {item.mrp && item.mrp !== item.price && (
+                    <span className="text-xs text-gray-400 line-through">
+                      Rs. {item.mrp}
+                    </span>
+                  )}
+                  <span className="text-sm font-semibold text-black">
+                    Rs. {item.price}
                   </span>
-                )}
-                <span className="text-sm font-semibold text-black">
-                  Rs. {item.price}
-                </span>
-              </div>
-            </Link>
-          ))}
+                </div>
+              </Link>
+            );
+          })}
         </div>
       )}
     </section>
