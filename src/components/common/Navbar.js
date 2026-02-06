@@ -39,34 +39,38 @@ export default function Navbar() {
         {/* Left */}
         <div className="flex items-center gap-6">
           <a href="/">
-          <div className="h-12 w-12 rounded-full bg-gray-200 overflow-hidden">
-            <img
-              src="/images/logo.png"
-              alt="Logo"
-              className="h-full w-full object-cover"
-            />
-          </div>
-          
+            <div className="h-12 w-12 rounded-full bg-gray-200 overflow-hidden">
+              <img
+                src="/images/logo.png"
+                alt="Logo"
+                className="h-full w-full object-cover"
+              />
+            </div>
           </a>
-          
-
 
           <nav className="flex gap-8  uppercase font-semibold">
-            <a href="/Women" className="hover:opacity-80">Women</a>
-            <a href="/Men" className="hover:opacity-80">Men</a>
+            <a href="/Women" className="hover:opacity-80">
+              Women
+            </a>
+            <a href="/Men" className="hover:opacity-80">
+              Men
+            </a>
 
-            <a href="/Our-Story" className="hover:opacity-80">Our Story</a>
-            <a href="/Contact" className="hover:opacity-80">Contact</a>
+            <a href="/Our-Story" className="hover:opacity-80">
+              Our Story
+            </a>
+            <a href="/Contact" className="hover:opacity-80">
+              Contact
+            </a>
           </nav>
         </div>
 
         {/* Center */}
         <a href="/">
-        <h1 className="text-3xl font-sans tracking-widest">
-          Khan&apos;s Collection
-        </h1>
+          <h1 className="text-3xl font-sans tracking-widest">
+            Khan&apos;s Boutique
+          </h1>
         </a>
-
 
         {/* Right */}
         <div className="flex items-center gap-6">
@@ -88,10 +92,9 @@ export default function Navbar() {
 
         {/* Center Logo */}
         <a href="/">
-        <h1 className="text-base font-bold tracking-widest uppercase">
-
-          Khan&apos;s Collection
-        </h1>
+          <h1 className="text-base font-bold tracking-widest uppercase">
+            Khan&apos;s Boutique
+          </h1>
         </a>
 
         {/* Right Icons */}
