@@ -12,7 +12,6 @@ export default function ProductDetail() {
 
   const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
-
   useEffect(() => {
     const fetchProduct = async () => {
       try {
@@ -36,7 +35,7 @@ export default function ProductDetail() {
 
   if (loading) {
     return (
-      <div className="py-32 text-center text-gray-500 ">
+      <div className="py-32 text-center text-gray-500">
         Loading product...
       </div>
     );
@@ -44,7 +43,7 @@ export default function ProductDetail() {
 
   if (!product) {
     return (
-      <div className="py-32 text-center mt-5">
+      <div className="py-32 text-center">
         <h2 className="text-xl font-semibold">
           Product not found
         </h2>
@@ -54,7 +53,12 @@ export default function ProductDetail() {
 
   /* WHATSAPP ORDER */
   const handleWhatsAppOrder = () => {
-    if (!selectedSize) return;
+    if (
+      product.productType === "Stitched" &&
+      !selectedSize
+    ) {
+      return;
+    }
 
     const message = `
 Hello 👋
@@ -62,7 +66,16 @@ I want to order:
 
 Product: ${product.title}
 Brand: ${product.brand}
-Size: ${selectedSize}
+Type: ${
+      product.productType === "Unstitched"
+        ? "Unstitched"
+        : "Stitched"
+    }
+Size: ${
+      product.productType === "Unstitched"
+        ? "Unstitched"
+        : selectedSize
+    }
 Price: Rs. ${product.price}
 
 Please guide me further.
@@ -77,24 +90,31 @@ Please guide me further.
 
   return (
     <section className="max-w-7xl mx-auto px-6 py-16 grid grid-cols-1 lg:grid-cols-2 gap-12 mt-10">
-   {/* LEFT – IMAGES */}
-<div className="space-y-6">
-  {product.images.map((img, i) => (
-    <div key={i} className="bg-gray-100">
-      <img
-        src={`${API_BASE_URL}${img}`}
-        alt={product.title}
-        className="w-full object-cover"
-      />
-    </div>
-  ))}
-</div>
+      
+      {/* LEFT – IMAGES */}
+      <div className="space-y-6">
+        {product.images.map((img, i) => {
+          const imageUrl = img.startsWith("http")
+            ? img
+            : `${API_BASE_URL}${img}`;
+
+          return (
+            <div key={i} className="bg-gray-100">
+              <img
+                src={imageUrl}
+                alt={product.title}
+                className="w-full object-cover"
+              />
+            </div>
+          );
+        })}
+      </div>
 
       {/* RIGHT – DETAILS */}
       <div className="lg:sticky top-20 h-fit">
 
         {/* BADGES */}
-        <div className="flex gap-2 mb-3 mt-5">
+        <div className="flex gap-2 mb-3">
           {product.isNew && (
             <span className="bg-black text-white text-xs px-2 py-1">
               New
@@ -111,41 +131,50 @@ Please guide me further.
           {product.title}
         </h1>
 
+        {/* BRAND */}
         <p className="text-sm text-gray-500 mt-1">
-          Brand: {product.brand}
+          {product.brand}
         </p>
 
-        <p className="text-sm text-gray-500">
-          Category: {product.category}
+        {/* PRODUCT TYPE (INSTEAD OF CATEGORY) */}
+        <p className="text-sm text-gray-500 mt-1">
+          {product.productType === "Unstitched"
+            ? "Unstitched Suit"
+            : "Ready to Wear"}
         </p>
 
+        {/* DESCRIPTION */}
         <p className="mt-4 text-gray-600 leading-relaxed">
           {product.description}
         </p>
 
-        {/* SIZE SELECTOR */}
-        <div className="mt-8">
-          <span className="text-sm font-medium block mb-2">
-            Select Size
-          </span>
+        {/* SIZE SELECTOR (ONLY WHEN REQUIRED) */}
+        {(product.category === "Men" ||
+          (product.category === "Women" &&
+            product.productType === "Stitched")) && (
+          <div className="mt-8">
+            <span className="text-sm font-medium block mb-2">
+              Select Size
+            </span>
 
-          <div className="flex gap-3 flex-wrap">
-            {product.sizes.map((size) => (
-              <button
-                key={size}
-                onClick={() => setSelectedSize(size)}
-                className={`w-12 h-12 border text-sm transition
-                  ${
-                    selectedSize === size
-                      ? "border-black bg-black text-white"
-                      : "border-gray-300 hover:border-black"
-                  }`}
-              >
-                {size}
-              </button>
-            ))}
+            <div className="flex gap-3 flex-wrap">
+              {product.sizes.map((size) => (
+                <button
+                  key={size}
+                  onClick={() => setSelectedSize(size)}
+                  className={`w-12 h-12 border text-sm transition
+                    ${
+                      selectedSize === size
+                        ? "border-black bg-black text-white"
+                        : "border-gray-300 hover:border-black"
+                    }`}
+                >
+                  {size}
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
         {/* PRICE */}
         <div className="mt-6 flex items-center gap-3">
@@ -163,9 +192,13 @@ Please guide me further.
         {/* WHATSAPP ORDER */}
         <button
           onClick={handleWhatsAppOrder}
-          disabled={!selectedSize}
+          disabled={
+            product.productType === "Stitched" &&
+            !selectedSize
+          }
           className={`mt-8 w-full py-4 text-white transition
             ${
+              product.productType === "Unstitched" ||
               selectedSize
                 ? "bg-green-600 hover:bg-green-700"
                 : "bg-gray-400 cursor-not-allowed"

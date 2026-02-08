@@ -4,19 +4,39 @@ import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 
+/* SIZES */
 const sizesList = ["XS", "S", "M", "L", "XL", "XXL"];
+
+/* BRANDS */
+const WOMEN_CATEGORIES = [
+  "Maria B",
+  "Charizma",
+  "Sadabahar",
+  "Agha Noor",
+  "Sapphire",
+  "Zara Shahjahan",
+  "Ethnc",
+  "Junaid Jamshed",
+  "Qalamkar",
+];
+
+const MEN_CATEGORIES = [
+  "Junaid Jamshed",
+  "Alkaram",
+  "Gul Ahmed",
+];
 
 export default function EditProductPage() {
   const { id } = useParams();
   const router = useRouter();
-
-    const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+  const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
   const [loading, setLoading] = useState(true);
+  const [gender, setGender] = useState("");
+  const [stitchType, setStitchType] = useState("");
 
   const [formData, setFormData] = useState({
     title: "",
-    category: "",
     brand: "",
     price: "",
     mrp: "",
@@ -24,12 +44,12 @@ export default function EditProductPage() {
     sizes: [],
     isNew: false,
     onSale: false,
-    isBestSeller: false, // ✅ ADDED
+    isBestSeller: false,
     existingImages: [],
     newImages: [],
   });
 
-  /* 🔹 FETCH PRODUCT */
+  /* FETCH PRODUCT */
   useEffect(() => {
     if (!id) return;
 
@@ -41,9 +61,11 @@ export default function EditProductPage() {
         const data = await res.json();
 
         if (data.success) {
+          setGender(data.product.category); // Women / Men
+          setStitchType(data.product.productType || "");
+
           setFormData({
             title: data.product.title || "",
-            category: data.product.category || "",
             brand: data.product.brand || "",
             price: data.product.price || "",
             mrp: data.product.mrp || "",
@@ -51,7 +73,7 @@ export default function EditProductPage() {
             sizes: data.product.sizes || [],
             isNew: data.product.isNew || false,
             onSale: data.product.onSale || false,
-            isBestSeller: data.product.isBestSeller || false, // ✅
+            isBestSeller: data.product.isBestSeller || false,
             existingImages: data.product.images || [],
             newImages: [],
           });
@@ -66,13 +88,7 @@ export default function EditProductPage() {
     fetchProduct();
   }, [id]);
 
-  /* 🔹 INPUT CHANGE */
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  /* 🔹 SIZE TOGGLE */
+  /* SIZE TOGGLE */
   const handleSizeChange = (size) => {
     setFormData((prev) => ({
       ...prev,
@@ -82,7 +98,7 @@ export default function EditProductPage() {
     }));
   };
 
-  /* 🔹 NEW IMAGE SELECT */
+  /* IMAGE HANDLERS */
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
     setFormData((prev) => ({
@@ -91,7 +107,6 @@ export default function EditProductPage() {
     }));
   };
 
-  /* 🔹 REMOVE EXISTING IMAGE */
   const removeExistingImage = (index) => {
     setFormData((prev) => ({
       ...prev,
@@ -99,19 +114,14 @@ export default function EditProductPage() {
     }));
   };
 
-  /* 🔹 REMOVE NEW IMAGE */
-  const removeNewImage = (index) => {
-    setFormData((prev) => ({
-      ...prev,
-      newImages: prev.newImages.filter((_, i) => i !== index),
-    }));
-  };
-
-  /* 🔹 SUBMIT UPDATE */
+  /* SUBMIT */
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!formData.sizes.length) {
+    if (
+      (gender === "Men" || (gender === "Women" && stitchType === "Stitched")) &&
+      !formData.sizes.length
+    ) {
       alert("Select at least one size");
       return;
     }
@@ -119,16 +129,29 @@ export default function EditProductPage() {
     const data = new FormData();
 
     data.append("title", formData.title);
+    data.append("category", gender); // Women / Men
     data.append("brand", formData.brand);
-    data.append("category", formData.category);
     data.append("price", formData.price);
     data.append("mrp", formData.mrp);
     data.append("description", formData.description);
-    data.append("sizes", JSON.stringify(formData.sizes));
+
+    data.append(
+      "sizes",
+      JSON.stringify(
+        gender === "Men" || stitchType === "Stitched"
+          ? formData.sizes
+          : []
+      )
+    );
+
+    data.append(
+      "productType",
+      gender === "Women" ? stitchType : "Stitched"
+    );
 
     data.append("isNew", formData.isNew);
     data.append("onSale", formData.onSale);
-    data.append("isBestSeller", formData.isBestSeller); // ✅
+    data.append("isBestSeller", formData.isBestSeller);
 
     data.append(
       "existingImages",
@@ -165,28 +188,21 @@ export default function EditProductPage() {
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
-      {/* HEADER */}
       <div className="mb-6">
-        <Link
-          href="/admin/products"
-          className="text-sm text-gray-500 hover:underline"
-        >
+        <Link href="/admin/products" className="text-sm text-gray-500">
           ← Back to Products
         </Link>
-
-        <h1 className="text-2xl font-semibold mt-2">
-          Edit Product
-        </h1>
+        <h1 className="text-2xl font-semibold mt-2">Edit Product</h1>
       </div>
 
-      {/* FORM */}
       <div className="max-w-2xl bg-white rounded-lg shadow p-6">
         <form onSubmit={handleSubmit} className="space-y-5">
 
           <input
-            name="title"
             value={formData.title}
-            onChange={handleChange}
+            onChange={(e) =>
+              setFormData({ ...formData, title: e.target.value })
+            }
             placeholder="Product Title"
             className="w-full border px-4 py-2 rounded"
             required
@@ -194,85 +210,74 @@ export default function EditProductPage() {
 
           {/* EXISTING IMAGES */}
           {formData.existingImages.length > 0 && (
-            <div>
-              <p className="text-sm font-medium mb-2">
-                Existing Images
-              </p>
-              <div className="flex flex-wrap gap-3">
-                {formData.existingImages.map((img, i) => (
-                  <div key={i} className="relative">
-                    <img
-                      src={img}
-                      className="w-24 h-24 object-cover border"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => removeExistingImage(i)}
-                      className="absolute -top-2 -right-2 bg-black text-white text-xs w-5 h-5 rounded-full"
-                    >
-                      ×
-                    </button>
-                  </div>
-                ))}
-              </div>
+            <div className="flex gap-3 flex-wrap">
+              {formData.existingImages.map((img, i) => (
+                <div key={i} className="relative">
+                  <img src={img} className="w-24 h-24 object-cover border" />
+                  <button
+                    type="button"
+                    onClick={() => removeExistingImage(i)}
+                    className="absolute -top-2 -right-2 bg-black text-white text-xs w-5 h-5 rounded-full"
+                  >
+                    ×
+                  </button>
+                </div>
+              ))}
             </div>
           )}
 
-          {/* NEW IMAGE UPLOAD */}
-          <input
-            type="file"
-            multiple
-            accept="image/*"
-            onChange={handleImageChange}
-            className="w-full border px-4 py-2 rounded"
-          />
+          <input type="file" multiple onChange={handleImageChange} />
 
-          {/* CATEGORY */}
+          {/* GENDER */}
           <select
-            name="category"
-            value={formData.category}
-            onChange={handleChange}
+            value={gender}
+            onChange={(e) => setGender(e.target.value)}
             className="w-full border px-4 py-2 rounded"
             required
           >
-            <option value="">Select Category</option>
+            <option value="">Select Gender</option>
             <option value="Women">Women</option>
             <option value="Men">Men</option>
           </select>
 
-          <input
-            name="brand"
-            value={formData.brand}
-            onChange={handleChange}
-            placeholder="Brand"
-            className="w-full border px-4 py-2 rounded"
-            required
-          />
+          {/* BRAND */}
+          {gender && (
+            <select
+              value={formData.brand}
+              onChange={(e) =>
+                setFormData({ ...formData, brand: e.target.value })
+              }
+              className="w-full border px-4 py-2 rounded"
+              required
+            >
+              <option value="">Select Brand</option>
+              {(gender === "Women"
+                ? WOMEN_CATEGORIES
+                : MEN_CATEGORIES
+              ).map((b) => (
+                <option key={b} value={b}>
+                  {b}
+                </option>
+              ))}
+            </select>
+          )}
 
-          <input
-            type="number"
-            name="price"
-            value={formData.price}
-            onChange={handleChange}
-            placeholder="Price"
-            className="w-full border px-4 py-2 rounded"
-            required
-          />
-
-          <input
-            type="number"
-            name="mrp"
-            value={formData.mrp}
-            onChange={handleChange}
-            placeholder="MRP"
-            className="w-full border px-4 py-2 rounded"
-          />
+          {/* STITCH TYPE */}
+          {gender === "Women" && (
+            <select
+              value={stitchType}
+              onChange={(e) => setStitchType(e.target.value)}
+              className="w-full border px-4 py-2 rounded"
+              required
+            >
+              <option value="">Select Stitch Type</option>
+              <option value="Stitched">Stitched</option>
+              <option value="Unstitched">Unstitched</option>
+            </select>
+          )}
 
           {/* SIZES */}
-          <div>
-            <p className="text-sm font-medium mb-2">
-              Available Sizes
-            </p>
+          {(gender === "Men" || stitchType === "Stitched") && (
             <div className="flex flex-wrap gap-4">
               {sizesList.map((size) => (
                 <label key={size} className="flex gap-2 items-center">
@@ -285,55 +290,26 @@ export default function EditProductPage() {
                 </label>
               ))}
             </div>
-          </div>
+          )}
 
           {/* FLAGS */}
-          <div className="flex flex-wrap gap-6">
-            <label className="flex gap-2 items-center">
-              <input
-                type="checkbox"
-                checked={formData.isNew}
-                onChange={(e) =>
-                  setFormData({ ...formData, isNew: e.target.checked })
-                }
-              />
-              New Arrival
-            </label>
-
-            <label className="flex gap-2 items-center">
-              <input
-                type="checkbox"
-                checked={formData.onSale}
-                onChange={(e) =>
-                  setFormData({ ...formData, onSale: e.target.checked })
-                }
-              />
-              On Sale
-            </label>
-
-            {/* ✅ BEST SELLER */}
-            <label className="flex gap-2 items-center">
-              <input
-                type="checkbox"
-                checked={formData.isBestSeller}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    isBestSeller: e.target.checked,
-                  })
-                }
-              />
-              Show in Best Sellers
-            </label>
+          <div className="flex gap-6">
+            <label><input type="checkbox" checked={formData.isNew}
+              onChange={(e)=>setFormData({...formData,isNew:e.target.checked})}/> New</label>
+            <label><input type="checkbox" checked={formData.onSale}
+              onChange={(e)=>setFormData({...formData,onSale:e.target.checked})}/> Sale</label>
+            <label><input type="checkbox" checked={formData.isBestSeller}
+              onChange={(e)=>setFormData({...formData,isBestSeller:e.target.checked})}/> Best</label>
           </div>
 
           <textarea
             rows="4"
-            name="description"
             value={formData.description}
-            onChange={handleChange}
-            placeholder="Description"
+            onChange={(e) =>
+              setFormData({ ...formData, description: e.target.value })
+            }
             className="w-full border px-4 py-2 rounded"
+            placeholder="Description"
           />
 
           <button className="w-full bg-black text-white py-2 rounded">

@@ -1,10 +1,7 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-
-/**
- * Images from your /public/images folder
- */
 const slides = [
   {
     id: 1,
@@ -13,6 +10,7 @@ const slides = [
     desktop: "/images/jj-2.jpg",
     mobile: "/images/jj-1.jpeg",
     alt: "Seasonal essentials for men",
+    href: "/Men", // 👈 MEN ROUTE
   },
   {
     id: 2,
@@ -21,6 +19,7 @@ const slides = [
     desktop: "/images/hero-desktop-1.jpg",
     mobile: "/images/Charizma-1.jpeg",
     alt: "Seasonal essentials for women",
+    href: "/Women", // 👈 WOMEN ROUTE
   },
   {
     id: 3,
@@ -28,13 +27,14 @@ const slides = [
     cta: "Shop Now",
     desktop: "/images/aghanoor-2.jpg",
     mobile: "/images/aghanoor-1.jpeg",
-    alt: "New arrivals",
+    alt: "New Timeless\nArrivals This Season",
+    href: "/Women", // 👈 NEW ARRIVALS ROUTE
   },
 ];
 
 export default function Hero({
   autoplay = true,
-  autoplayMs = 6000,
+  autoplayMs = 3000,
   parallaxSpeed = 0.06,
 }) {
   const [index, setIndex] = useState(0);
@@ -132,21 +132,19 @@ export default function Hero({
               {/* Content */}
               <div className="absolute inset-0 flex items-end">
                 <div className="max-w-[1200px] w-full mx-auto px-6 md:px-12 lg:px-20 pb-10 md:pb-14 lg:pb-16">
-                  <p className="text-white text-sm mb-2">
-                    01–0{i + 1}
-                  </p>
+                  <p className="text-white text-sm mb-2">01–0{i + 1}</p>
 
                   <h2 className="text-white font-extrabold whitespace-pre-line leading-tight text-2xl md:text-4xl lg:text-5xl">
                     {s.title}
                   </h2>
 
                   <div className="mt-5">
-                    <a
-                      href="#"
-                      className="inline-flex items-center gap-2 bg-white text-black text-sm font-medium px-5 py-2 rounded-md shadow-md"
+                    <Link
+                      href={s.href}
+                      className="inline-flex items-center gap-2 bg-white text-black text-sm font-medium px-5 py-2 rounded-md shadow-md hover:opacity-90 transition"
                     >
                       {s.cta} <span className="text-xs">→</span>
-                    </a>
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -154,31 +152,30 @@ export default function Hero({
           );
         })}
       </div>
-{/* Line Indicators */}
-<div className="absolute bottom-6 left-0 right-0 flex justify-center gap-4 z-20 px-6">
-  {slides.map((s, i) => {
-    const isActive = index === i;
-    return (
-      <button
-        key={s.id}
-        onClick={() => setIndex(i)}
-        className="w-20 h-1 bg-white/40 overflow-hidden rounded-full relative"
-      >
-        {/* Inner animated bar */}
-        <div
-          className="absolute top-0 left-0 h-full bg-white"
-          style={{
-            width: isActive ? "100%" : "0%",
-            transition: isActive ? `width ${autoplayMs}ms linear` : "none",
-          }}
-        ></div>
-      </button>
-    );
-  })}
-</div>
-
-
-     
+      {/* Line Indicators */}
+      <div className="absolute bottom-6 left-0 right-0 flex justify-center gap-4 z-20 px-6">
+        {slides.map((s, i) => {
+          const isActive = index === i;
+          return (
+            <button
+              key={s.id}
+              onClick={() => setIndex(i)}
+              className="w-20 h-1 bg-white/40 overflow-hidden rounded-full relative"
+            >
+              {/* Inner animated bar */}
+              <div
+                className="absolute top-0 left-0 h-full bg-white"
+                style={{
+                  width: isActive ? "100%" : "0%",
+                  transition: isActive
+                    ? `width ${autoplayMs}ms linear`
+                    : "none",
+                }}
+              ></div>
+            </button>
+          );
+        })}
+      </div>
     </section>
   );
 }

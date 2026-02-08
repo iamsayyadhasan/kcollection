@@ -7,14 +7,35 @@ import { useRouter } from "next/navigation";
 /* AVAILABLE SIZES */
 const sizesList = ["XS", "S", "M", "L", "XL", "XXL"];
 
+/* WOMEN & MEN BRANDS */
+const WOMEN_CATEGORIES = [
+  "Maria B",
+  "Charizma",
+  "Sadabahar",
+  "Agha Noor",
+  "Sapphire",
+  "Zara Shahjahan",
+  "Ethnc",
+  "Junaid Jamshed",
+  "Qalamkar",
+];
+
+const MEN_CATEGORIES = [
+  "Junaid Jamshed",
+  "Alkaram",
+  "Gul Ahmed",
+];
+
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function AddProductPage() {
   const router = useRouter();
 
+  const [gender, setGender] = useState("");
+  const [stitchType, setStitchType] = useState("");
+
   const [formData, setFormData] = useState({
     title: "",
-    category: "",
     brand: "",
     price: "",
     mrp: "",
@@ -22,8 +43,8 @@ export default function AddProductPage() {
     sizes: [],
     isNew: false,
     onSale: false,
-    isBestSeller: false, // ✅ NEW
-    images: [], // File objects
+    isBestSeller: false,
+    images: [],
   });
 
   /* SIZE TOGGLE */
@@ -36,13 +57,12 @@ export default function AddProductPage() {
     }));
   };
 
-  /* IMAGE SELECT (APPEND, NOT REPLACE) */
+  /* IMAGE UPLOAD */
   const handleImageChange = (e) => {
-    const selectedFiles = Array.from(e.target.files);
-
+    const files = Array.from(e.target.files);
     setFormData((prev) => ({
       ...prev,
-      images: [...prev.images, ...selectedFiles],
+      images: [...prev.images, ...files],
     }));
   };
 
@@ -63,34 +83,71 @@ export default function AddProductPage() {
       return;
     }
 
-    if (!formData.sizes.length) {
+    if (!gender) {
+      alert("Please select gender");
+      return;
+    }
+
+    if (!formData.brand) {
+      alert("Please select brand");
+      return;
+    }
+
+    if (gender === "Women" && !stitchType) {
+      alert("Please select stitch type");
+      return;
+    }
+
+    if (
+      (gender === "Men" ||
+        (gender === "Women" && stitchType === "Stitched")) &&
+      !formData.sizes.length
+    ) {
       alert("Please select at least one size");
       return;
     }
 
     const data = new FormData();
 
+    /* BASIC */
     data.append("title", formData.title);
     data.append(
       "slug",
-      formData.title
-        .toLowerCase()
-        .trim()
-        .replace(/[^a-z0-9]+/g, "-")
+      formData.title.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-")
     );
-    data.append("brand", formData.brand);
-    data.append("category", formData.category);
-    data.append("price", formData.price);
-    data.append("mrp", formData.mrp);
-    data.append("description", formData.description);
-    data.append("sizes", JSON.stringify(formData.sizes));
 
-    // ✅ FLAGS
+    data.append("category", gender);
+    data.append("brand", formData.brand);
+
+    /* ✅ ALWAYS SET productType */
+    const finalProductType =
+      gender === "Women" ? stitchType : "Stitched";
+
+    data.append("productType", finalProductType);
+
+    /* PRICING */
+    data.append("price", formData.price);
+    if (formData.mrp) data.append("mrp", formData.mrp);
+
+    /* DESCRIPTION */
+    data.append("description", formData.description);
+
+    /* SIZES */
+    if (
+      gender === "Men" ||
+      (gender === "Women" && stitchType === "Stitched")
+    ) {
+      data.append("sizes", JSON.stringify(formData.sizes));
+    } else {
+      data.append("sizes", JSON.stringify([]));
+    }
+
+    /* FLAGS */
     data.append("isNew", formData.isNew);
     data.append("onSale", formData.onSale);
     data.append("isBestSeller", formData.isBestSeller);
 
-    // ✅ IMAGES
+    /* IMAGES */
     formData.images.forEach((img) => {
       data.append("images", img);
     });
@@ -100,7 +157,7 @@ export default function AddProductPage() {
         `${API_BASE_URL}/api/product/add-product`,
         {
           method: "POST",
-          body: data, // ❌ no headers
+          body: data,
         }
       );
 
@@ -110,9 +167,10 @@ export default function AddProductPage() {
         alert("✅ Product added successfully");
         router.push("/admin/products");
       } else {
-        alert("❌ Failed to add product");
+        alert(result.message || "❌ Failed to add product");
       }
     } catch (error) {
+      console.error(error);
       alert("❌ Server error");
     }
   };
@@ -139,7 +197,6 @@ export default function AddProductPage() {
       {/* FORM */}
       <div className="max-w-2xl bg-white rounded-lg shadow p-6">
         <form className="space-y-5" onSubmit={handleSubmit}>
-          
           {/* TITLE */}
           <input
             required
@@ -150,7 +207,7 @@ export default function AddProductPage() {
             }
           />
 
-          {/* IMAGE UPLOAD */}
+          {/* IMAGES */}
           <input
             type="file"
             multiple
@@ -159,7 +216,6 @@ export default function AddProductPage() {
             onChange={handleImageChange}
           />
 
-          {/* IMAGE PREVIEW */}
           {formData.images.length > 0 && (
             <div className="flex flex-wrap gap-3">
               {formData.images.map((img, index) => (
@@ -181,28 +237,56 @@ export default function AddProductPage() {
             </div>
           )}
 
-          {/* CATEGORY */}
+          {/* GENDER */}
           <select
             required
             className="w-full border rounded-md px-4 py-2"
-            onChange={(e) =>
-              setFormData({ ...formData, category: e.target.value })
-            }
+            value={gender}
+            onChange={(e) => {
+              setGender(e.target.value);
+              setStitchType("");
+              setFormData({ ...formData, brand: "", sizes: [] });
+            }}
           >
-            <option value="">Select Category</option>
+            <option value="">Select Gender</option>
             <option value="Women">Women</option>
             <option value="Men">Men</option>
           </select>
 
           {/* BRAND */}
-          <input
-            required
-            placeholder="Brand"
-            className="w-full border rounded-md px-4 py-2"
-            onChange={(e) =>
-              setFormData({ ...formData, brand: e.target.value })
-            }
-          />
+          {gender && (
+            <select
+              required
+              className="w-full border rounded-md px-4 py-2"
+              value={formData.brand}
+              onChange={(e) =>
+                setFormData({ ...formData, brand: e.target.value })
+              }
+            >
+              <option value="">Select Brand</option>
+              {(gender === "Women"
+                ? WOMEN_CATEGORIES
+                : MEN_CATEGORIES
+              ).map((brand) => (
+                <option key={brand} value={brand}>
+                  {brand}
+                </option>
+              ))}
+            </select>
+          )}
+
+          {/* STITCH TYPE */}
+          {gender === "Women" && (
+            <select
+              className="w-full border rounded-md px-4 py-2"
+              value={stitchType}
+              onChange={(e) => setStitchType(e.target.value)}
+            >
+              <option value="">Select Stitch Type</option>
+              <option value="Stitched">Stitched</option>
+              <option value="Unstitched">Unstitched</option>
+            </select>
+          )}
 
           {/* PRICE */}
           <input
@@ -226,23 +310,26 @@ export default function AddProductPage() {
           />
 
           {/* SIZES */}
-          <div>
-            <p className="text-sm font-medium mb-2">
-              Available Sizes
-            </p>
-            <div className="flex flex-wrap gap-4">
-              {sizesList.map((size) => (
-                <label key={size} className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    checked={formData.sizes.includes(size)}
-                    onChange={() => handleSizeChange(size)}
-                  />
-                  {size}
-                </label>
-              ))}
+          {(gender === "Men" ||
+            (gender === "Women" && stitchType === "Stitched")) && (
+            <div>
+              <p className="text-sm font-medium mb-2">
+                Available Sizes
+              </p>
+              <div className="flex flex-wrap gap-4">
+                {sizesList.map((size) => (
+                  <label key={size} className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      checked={formData.sizes.includes(size)}
+                      onChange={() => handleSizeChange(size)}
+                    />
+                    {size}
+                  </label>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
 
           {/* FLAGS */}
           <div className="flex flex-wrap gap-6">
@@ -251,10 +338,7 @@ export default function AddProductPage() {
                 type="checkbox"
                 checked={formData.isNew}
                 onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    isNew: e.target.checked,
-                  })
+                  setFormData({ ...formData, isNew: e.target.checked })
                 }
               />
               New Arrival
@@ -265,16 +349,12 @@ export default function AddProductPage() {
                 type="checkbox"
                 checked={formData.onSale}
                 onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    onSale: e.target.checked,
-                  })
+                  setFormData({ ...formData, onSale: e.target.checked })
                 }
               />
               On Sale
             </label>
 
-            {/* ✅ BEST SELLER */}
             <label className="flex items-center gap-2">
               <input
                 type="checkbox"
@@ -286,7 +366,7 @@ export default function AddProductPage() {
                   })
                 }
               />
-              Show in Best Sellers
+              Best Seller
             </label>
           </div>
 
@@ -319,7 +399,6 @@ export default function AddProductPage() {
               Cancel
             </Link>
           </div>
-
         </form>
       </div>
     </div>

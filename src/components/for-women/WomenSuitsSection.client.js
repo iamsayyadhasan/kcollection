@@ -5,7 +5,6 @@ import Link from "next/link";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
-/* BRAND-BASED TABS */
 const tabs = [
   "All",
   "Maria B",
@@ -14,6 +13,9 @@ const tabs = [
   "Agha Noor",
   "Sapphire",
   "Zara Shahjahan",
+  "Ethnc",
+  "Junaid Jamshed",
+  "Qalamkar",
   "New Arrivals",
   "Sale",
 ];

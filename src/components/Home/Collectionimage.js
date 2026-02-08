@@ -1,8 +1,9 @@
+import Link from "next/link";
+
 export default function Collections() {
   return (
     <section className="w-full">
       <div className="grid grid-cols-1 md:grid-cols-2">
-        
         {/* MEN COLLECTION */}
         <div className="relative h-[670px]">
           <img
@@ -17,9 +18,11 @@ export default function Collections() {
               Men’s <br /> Collection
             </h3>
 
-            <button className="bg-white text-black px-4 py-2 text-sm">
-              Shop Now →
-            </button>
+            <Link href="/Men">
+              <button className="bg-white text-black px-4 py-2 text-sm cursor-pointer">
+                Shop Now →
+              </button>
+            </Link>
           </div>
         </div>
 
@@ -37,12 +40,13 @@ export default function Collections() {
               Women’s <br /> Collection
             </h3>
 
-            <button className="bg-white text-black px-4 py-2 text-sm">
-              Shop Now →
-            </button>
+            <Link href="/Women">
+              <button className="bg-white text-black px-4 py-2 text-sm  cursor-pointer">
+                Shop Now →
+              </button>
+            </Link>
           </div>
         </div>
-
       </div>
     </section>
   );
