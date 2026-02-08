@@ -30,7 +30,7 @@ function Origin() {
           </p>
 
           <img
-            src="/Social/Apa-O.jpg"
+            src="/Social/Apa-o.jpg"
             alt="Model posing thoughtfully against pink background"
             className="w-full max-w-2xl object-cover"
           />
