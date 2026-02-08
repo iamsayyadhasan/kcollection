@@ -1,12 +1,10 @@
-import SearchPage from '@/components/Searchpage'
-import React from 'react'
+import { Suspense } from "react";
+import SearchPage from "@/components/Searchpage";
 
-function Search() {
+export default function Search() {
   return (
-    <div>
-      <SearchPage/>
-    </div>
-  )
+    <Suspense fallback={<div className="pt-32 text-center">Loading search…</div>}>
+      <SearchPage />
+    </Suspense>
+  );
 }
-
-export default Search
