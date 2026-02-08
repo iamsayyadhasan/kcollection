@@ -15,19 +15,15 @@ export default function Navbar() {
 
   const pathname = usePathname();
   const router = useRouter();
-  const isDetailPage = pathname.startsWith("/products/") || pathname.startsWith("/search");
+  const isDetailPage =
+    pathname.startsWith("/products/") || pathname.startsWith("/search");
 
   const API_BASE_URL = "https://api.khansboutique.com";
   const getImageUrl = (images = []) => {
-  if (!images.length) return "/placeholder.png";
-
-  const img = images[0];
-  return img.startsWith("http")
-    ? img
-    : `${API_BASE_URL}${img}`;
-};
-
-
+    if (!images.length) return "/placeholder.png";
+    const img = images[0];
+    return img.startsWith("http") ? img : `${API_BASE_URL}${img}`;
+  };
 
   /* 🔒 DO NOT TOUCH THIS LOGIC */
   useEffect(() => {
@@ -51,7 +47,7 @@ export default function Navbar() {
     }
 
     const res = await fetch(
-      "https://api.khansboutique.com/api/product/get-all-products"
+      "https://api.khansboutique.com/api/product/get-all-products",
     );
     const data = await res.json();
 
@@ -59,7 +55,7 @@ export default function Navbar() {
       .filter(
         (p) =>
           p.title?.toLowerCase().includes(value.toLowerCase()) ||
-          p.brand?.toLowerCase().includes(value.toLowerCase())
+          p.brand?.toLowerCase().includes(value.toLowerCase()),
       )
       .slice(0, 6);
 
@@ -74,7 +70,6 @@ export default function Navbar() {
     }
   };
 
-  /* 🎯 SEARCH COLOR FIX (ONLY SEARCH, NOT NAVBAR) */
   const searchTextColor = scrolled ? "text-white" : "text-black";
   const searchBg = scrolled ? "bg-black" : "bg-white";
   const dropdownBg = scrolled ? "bg-black" : "bg-white";
@@ -93,16 +88,21 @@ export default function Navbar() {
       {/* ================= DESKTOP NAVBAR ================= */}
       <div
         className={`hidden md:flex items-center justify-between px-6 transition-all duration-300
-        ${isDetailPage || scrolled
-          ? "py-2 bg-white text-black shadow-sm"
-          : "py-4 bg-transparent text-white"}
+        ${
+          isDetailPage || scrolled
+            ? "py-2 bg-white text-black shadow-sm"
+            : "py-4 bg-transparent text-white"
+        }
       `}
       >
         {/* Left */}
         <div className="flex items-center gap-6">
           <a href="/">
             <div className="h-12 w-12 rounded-full bg-gray-200 overflow-hidden">
-              <img src="/images/logo.png" className="h-full w-full object-cover" />
+              <img
+                src="/images/logo.png"
+                className="h-full w-full object-cover"
+              />
             </div>
           </a>
 
@@ -123,12 +123,10 @@ export default function Navbar() {
 
         {/* Right */}
         <div className="relative flex items-center gap-5">
-          {/* Search Icon */}
           <button onClick={() => setShowSearch(!showSearch)}>
             <FiSearch size={20} />
           </button>
 
-          {/* Search Input + Dropdown */}
           {showSearch && (
             <div className="relative">
               <input
@@ -139,56 +137,49 @@ export default function Navbar() {
                 placeholder="Search products..."
                 className={`border px-4 py-2 rounded-md w-72 text-sm outline-none ${searchBg} ${searchTextColor}`}
               />
-{results.length > 0 && (
-  <div
-    className={`absolute top-full mt-2 w-full border shadow-lg z-50 ${dropdownBg} ${searchTextColor}`}
-  >
-    {results.map((p) => {
-      const imageUrl = getImageUrl(p.images);
 
-      return (
-        <a
-          key={p.slug}
-          href={`/products/${p.slug}`}
-          className={`flex items-center gap-3 px-4 py-2 text-sm ${dropdownHover}`}
-        >
-          {/* Thumbnail */}
-          <img
-            src={imageUrl}
-            alt={p.title}
-            className="w-10 h-10 object-cover rounded"
-            onError={(e) => {
-              e.currentTarget.src = "/placeholder.png";
-            }}
-          />
+              {results.length > 0 && (
+                <div
+                  className={`absolute top-full mt-2 w-full border shadow-lg z-50 ${dropdownBg} ${searchTextColor}`}
+                >
+                  {results.map((p) => {
+                    const imageUrl = getImageUrl(p.images);
 
-          {/* Text */}
-          <div className="flex flex-col">
-            <span className="font-medium">{p.title}</span>
-            <span className="text-xs opacity-70">{p.brand}</span>
-          </div>
-        </a>
-      );
-    })}
+                    return (
+                      <a
+                        key={p.slug}
+                        href={`/products/${p.slug}`}
+                        className={`flex items-center gap-3 px-4 py-2 text-sm ${dropdownHover}`}
+                      >
+                        <img
+                          src={imageUrl}
+                          className="w-10 h-10 object-cover rounded"
+                        />
+                        <div className="flex flex-col">
+                          <span className="font-medium">{p.title}</span>
+                          <span className="text-xs opacity-70">{p.brand}</span>
+                        </div>
+                      </a>
+                    );
+                  })}
 
-    <button
-      onClick={() =>
-        router.push(`/search?query=${encodeURIComponent(searchText)}`)
-      }
-      className={`w-full text-center text-sm py-2 border-t ${dropdownHover}`}
-    >
-      View all results →
-    </button>
-  </div>
-)}
-
-              
+                  <button
+                    onClick={() =>
+                      router.push(
+                        `/search?query=${encodeURIComponent(searchText)}`,
+                      )
+                    }
+                    className={`w-full text-center text-sm py-2 border-t ${dropdownHover}`}
+                  >
+                    View all results →
+                  </button>
+                </div>
+              )}
             </div>
           )}
 
-          {/* WhatsApp */}
           <a
-            href="https://wa.me/9897266518"
+            href="https://wa.me/9897266518?text=Hi%20Khan’s%20Boutique%20👋%0AI'm%20interested%20in%20your%20collections.%20Please%20guide%20me%20with%20details%20and%20availability."
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -200,9 +191,11 @@ export default function Navbar() {
       {/* ================= MOBILE NAVBAR ================= */}
       <div
         className={`md:hidden flex items-center justify-between px-4 transition-all duration-300
-        ${isDetailPage || scrolled || menuOpen
-          ? "bg-white text-black py-3 shadow"
-          : "bg-transparent text-white py-4"}
+        ${
+          isDetailPage || scrolled || menuOpen
+            ? "bg-white text-black py-3 shadow"
+            : "bg-transparent text-white py-4"
+        }
       `}
       >
         <button onClick={() => setMenuOpen(!menuOpen)}>
@@ -216,12 +209,30 @@ export default function Navbar() {
         </a>
 
         <div className="flex items-center gap-4">
-<button onClick={() => router.push("/search")}>
-  <FiSearch size={18} />
-</button>
-          <FaWhatsapp size={20} className="text-green-600" />
+          <button onClick={() => router.push("/search")}>
+            <FiSearch size={18} />
+          </button>
+          <a
+            href="https://wa.me/9897266518?text=Hi%20Khan’s%20Boutique%20👋%0AI'm%20interested%20in%20your%20collections.%20Please%20guide%20me%20with%20details%20and%20availability."
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <FaWhatsapp size={22} className="text-green-600" />
+          </a>
         </div>
       </div>
+
+      {/* ================= MOBILE MENU ================= */}
+      {menuOpen && (
+        <div className="md:hidden bg-white px-6 py-6 shadow-lg">
+          <nav className="flex flex-col gap-5 text-gray-800 text-lg">
+            <a href="/Men">Men</a>
+            <a href="/Women">Women</a>
+            <a href="/Our-Story">Our Story</a>
+            <a href="/Contact">Contact</a>
+          </nav>
+        </div>
+      )}
     </header>
   );
 }

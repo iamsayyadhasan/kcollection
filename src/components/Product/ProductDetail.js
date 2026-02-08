@@ -11,6 +11,7 @@ export default function ProductDetail() {
   const [loading, setLoading] = useState(true);
 
   const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+  const productUrl = `${window.location.origin}/products/${product.slug}`;
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -51,42 +52,42 @@ export default function ProductDetail() {
     );
   }
 
-  /* WHATSAPP ORDER */
   const handleWhatsAppOrder = () => {
-    if (
-      product.productType === "Stitched" &&
-      !selectedSize
-    ) {
-      return;
-    }
+  if (product.productType === "Stitched" && !selectedSize) {
+    return;
+  }
 
-    const message = `
+  const productUrl = `${process.env.NEXT_PUBLIC_API_URL}/products/${product.slug}`;
+
+  const message = `
 Hello 👋
-I want to order:
 
-Product: ${product.title}
-Brand: ${product.brand}
-Type: ${
-      product.productType === "Unstitched"
-        ? "Unstitched"
-        : "Stitched"
-    }
-Size: ${
-      product.productType === "Unstitched"
-        ? "Unstitched"
-        : selectedSize
-    }
-Price: Rs. ${product.price}
+I want to order this product:
+
+🛍️ ${product.title}
+🏷️ Brand: ${product.brand}
+👗 Type: ${
+    product.productType === "Unstitched" ? "Unstitched" : "Stitched"
+  }
+📏 Size: ${
+    product.productType === "Unstitched"
+      ? "Unstitched"
+      : selectedSize
+  }
+💰 Price: Rs. ${product.price}
+
+🔗 Product link:
+${productUrl}
 
 Please guide me further.
-    `;
+  `;
 
-    const url = `https://wa.me/9897266518?text=${encodeURIComponent(
-      message
-    )}`;
+  const url = `https://wa.me/9897266518?text=${encodeURIComponent(message)}`;
+  window.open(url, "_blank");
+};
 
-    window.open(url, "_blank");
-  };
+
+
 
   return (
     <section className="max-w-7xl mx-auto px-6 py-16 grid grid-cols-1 lg:grid-cols-2 gap-12 mt-10">
