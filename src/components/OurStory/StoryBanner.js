@@ -10,7 +10,7 @@ export default function StoryBanner() {
         {/* Mobile image */}
         <source
           media="(max-width: 767px)"
-          srcSet="/Social/IMG_0313.jpg"
+          srcSet="/images/storybanner.jpg"
         />
 
         {/* Desktop image */}
@@ -21,7 +21,7 @@ export default function StoryBanner() {
 
         {/* Fallback image */}
         <img
-          src="/Social/IMG_0313.jpg"
+          src="/images/storybanner.jpg"
           alt="Our Story"
           className="w-full h-full object-cover"
         />

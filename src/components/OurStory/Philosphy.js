@@ -26,7 +26,7 @@ function Philosphy() {
           </p>
 
        <img
-            src="/Social/Apa1.jpg"
+            src="/images/apa.jpg"
             alt="Model posing thoughtfully against pink background"
             className="w-full max-w-2xl object-cover"
           />
