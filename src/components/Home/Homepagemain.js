@@ -21,7 +21,7 @@ function Homepage() {
       <HomeNewSales/>
       <Review/>
       <Socailmedia/>
-      <ButtonPage/>
+      {/* <ButtonPage/> */}
 
     </div>
   )

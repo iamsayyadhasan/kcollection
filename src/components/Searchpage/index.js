@@ -14,7 +14,6 @@ export default function SearchPage() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  // 🔍 Fetch products when query changes
   useEffect(() => {
     if (query.length < 2) {
       setProducts([]);

@@ -4,13 +4,28 @@ export default function Footer() {
   return (
     <footer className="w-full bg-[#1a1a1a] text-white">
       <div className="max-w-7xl mx-auto px-6 py-16">
-        {/* ================= TOP FEATURE CARDS ================= */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-20">
-          <Feature icon={Truck} text="Free shipping from $149" />
-          <Feature icon={RefreshCw} text="Easy returns within 30 days" />
-          <Feature icon={Lock} text="Secure payments online" />
-          <Feature icon={Headset} text="24/7 customer support" />
-        </div>
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-20">
+  <Feature 
+    icon={Truck} 
+    text="Shipping Charges Applicable" 
+  />
+  
+  <Feature 
+    icon={RefreshCw} 
+    text="No Returns or Exchanges" 
+  />
+  
+  <Feature 
+    icon={Lock} 
+    text="100% Secure Online Payments" 
+  />
+  
+  <Feature 
+    icon={Headset} 
+    text="Dedicated Customer Support" 
+  />
+</div>
+
 
         {/* ================= BOTTOM SECTION ================= */}
         <div className="space-y-24">
@@ -19,7 +34,7 @@ export default function Footer() {
             {/* Brand */}
             <div className="md:col-span-5">
               <h1 className="text-5xl sm:text-6xl md:text-[96px] font-semibold tracking-tighter leading-none">
-                Khan's Collection
+                Khan's Boutique
               </h1>
               <p className="text-gray-500 mt-6">© 2025 All Rights Reserved</p>
 
@@ -38,9 +53,9 @@ export default function Footer() {
               title="Navigation"
               span="md:col-span-2"
               items={[
-                ["Men", "./men/for-men"],
-                ["Women", "./women/for-women"],
-                ["Our Story", "./our-story"],
+                ["Men", "./Men"],
+                ["Women", "./Women"],
+                ["Our Story", "./Our-Story"],
               ]}
             />
 
@@ -49,8 +64,8 @@ export default function Footer() {
               title="Legal"
               span="md:col-span-2"
               items={[
-                ["Privacy Policy", "./legal/privacy-policy"],
-                ["Terms of Service", "./legal/terms-of-services"],
+                ["Privacy Policy", "./privacy-policy"],
+                ["Terms of Service", "./terms-of-service"],
               ]}
             />
 
@@ -60,7 +75,6 @@ export default function Footer() {
               span="md:col-span-2"
               items={[
                 ["Contact", "./contact"],
-                ["FAQ", "./contact#faq"],
               ]}
             />
           </div>
@@ -109,7 +123,7 @@ export default function Footer() {
 
 function Feature({ icon: Icon, text }) {
   return (
-    <div className="bg-[#262626] rounded-xl p-8  flex flex-col items-center text-center">
+    <div className=" rounded-xl p-8  flex flex-col items-center text-center">
       <Icon className="w-10 h-10 mb-4" />
       <p className="text-gray-400 text-sm">{text}</p>
     </div>

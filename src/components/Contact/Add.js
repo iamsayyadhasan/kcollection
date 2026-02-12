@@ -1,3 +1,4 @@
+import { Link } from "lucide-react";
 import React from "react";
 
 export default function ContactSection() {
@@ -28,18 +29,31 @@ export default function ContactSection() {
                 (Address)
               </p>
               <p className="text-base">
-                Crown Apartments, Kabir Colony, Patwari Ka Nagla <br/> Aligarh, Uttar Pradesh 202001
+                Kabir Colony, Patwari Ka Nagla <br/> Aligarh, Uttar Pradesh 202001
               </p>
             </div>
+{/* Socials */}
+<div>
+  <p className="text-sm text-gray-500 mb-2">(Socials)</p>
 
-            {/* Socials */}
-            <div>
-              <p className="text-sm text-gray-500 mb-2">
-                (Socials)
-              </p>
-              <p className="text-base">Instagram</p>
-              <p className="text-base">Twitter (X)</p>
-            </div>
+  <a
+    href="https://www.instagram.com/khans__collection"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="flex items-center gap-2 text-base"
+  >
+    Instagram
+  </a>
+
+  <a
+    href="https://www.facebook.com/khanscollezioni"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="flex items-center gap-2 text-base"
+  >
+    Facebook
+  </a>
+</div>
 
             {/* Customer Support */}
             <div>
@@ -47,19 +61,19 @@ export default function ContactSection() {
                 (Customer Support)
               </p>
               <p className="text-base">
-                hello@marion.com
+                hello@khanscollection.com
               </p>
             </div>
 
             {/* Partnerships */}
-            <div>
+            {/* <div>
               <p className="text-sm text-gray-500 mb-2">
                 (Partnerships & Collaborations)
               </p>
               <p className="text-base">
                 collab@marion.com
               </p>
-            </div>
+            </div> */}
 
           </div>
         </div>

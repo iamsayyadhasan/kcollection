@@ -16,7 +16,7 @@ export default function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
   const isDetailPage =
-    pathname.startsWith("/products/") || pathname.startsWith("/search");
+    pathname.startsWith("/products/") || pathname.startsWith("/search") || pathname.startsWith("/privacy-policy" ) || pathname.startsWith("/terms-of-service");
 
   const API_BASE_URL = "https://api.khansboutique.com";
   const getImageUrl = (images = []) => {
