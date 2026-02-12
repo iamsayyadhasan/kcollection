@@ -4,30 +4,15 @@ export default function Footer() {
   return (
     <footer className="w-full bg-[#1a1a1a] text-white">
       <div className="max-w-7xl mx-auto px-6 py-16">
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-20">
-  <Feature 
-    icon={Truck} 
-    text="Shipping Charges Applicable" 
-  />
-  
-  <Feature 
-    icon={RefreshCw} 
-    text="No Returns or Exchanges" 
-  />
-  
-  <Feature 
-    icon={Lock} 
-    text="100% Secure Online Payments" 
-  />
-  
-  <Feature 
-    icon={Headset} 
-    text="Dedicated Customer Support" 
-  />
-</div>
+        {/* ================= FEATURES ================= */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-20">
+          <Feature icon={Truck} text="Shipping Charges Applicable" />
+          <Feature icon={RefreshCw} text="No Returns or Exchanges" />
+          <Feature icon={Lock} text="100% Secure Online Payments" />
+          <Feature icon={Headset} text="Dedicated Customer Support" />
+        </div>
 
-
-        {/* ================= BOTTOM SECTION ================= */}
+        {/* ================= MAIN CONTENT ================= */}
         <div className="space-y-24">
           {/* -------- ROW 1: BRAND + LINKS -------- */}
           <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
@@ -36,6 +21,7 @@ export default function Footer() {
               <h1 className="text-5xl sm:text-6xl md:text-[96px] font-semibold tracking-tighter leading-none">
                 Khan's Boutique
               </h1>
+
               <p className="text-gray-500 mt-6">© 2025 All Rights Reserved</p>
 
               <div className="flex gap-6 mt-10">
@@ -73,15 +59,14 @@ export default function Footer() {
             <Links
               title="Help"
               span="md:col-span-2"
-              items={[
-                ["Contact", "./contact"],
-              ]}
+              items={[["Contact", "./Contact"]]}
             />
           </div>
 
-          {/* -------- ROW 2: NEWSLETTER (RIGHT SIDE) -------- */}
+          {/* -------- ROW 2: NEWSLETTER -------- */}
           <div className="grid grid-cols-1 md:grid-cols-12">
             <div className="md:col-span-6" />
+
             <div className="md:col-span-6 max-w-xl">
               <p className="mb-6">
                 Subscribe to our newsletter for new arrivals and special offers.
@@ -114,6 +99,37 @@ export default function Footer() {
             </div>
           </div>
         </div>
+
+        {/* ================= DEVELOPER CREDIT ================= */}
+        <div className="pt-16 mt-16 border-t border-white/10 text-center">
+          <div className="flex flex-col items-center gap-3">
+            {/* Social icons (hidden until hover) */}
+            <div className="flex gap-4 opacity-80">
+              <a
+                href="https://www.linkedin.com/in/sayyadhasan/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:scale-110 transition"
+              >
+                <img src="/Social/linkedin.svg" className="w-6 h-6 invert" />
+              </a>
+            </div>
+
+            {/* Credit line */}
+            <p className="text-gray-300 text-sm md:text-base">
+              Crafted & developed by{" "}
+              <a
+                href="https://sayyadhasan.vercel.app/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-medium text-white hover:text-[#5000ca]  transition-all duration-300"
+              >
+                Sayyad Hasan Shahzad
+              </a>{" "}
+              with <span className="text-purple-500">💜</span>
+            </p>
+          </div>
+        </div>
       </div>
     </footer>
   );
@@ -123,7 +139,7 @@ export default function Footer() {
 
 function Feature({ icon: Icon, text }) {
   return (
-    <div className=" rounded-xl p-8  flex flex-col items-center text-center">
+    <div className="rounded-xl p-8 flex flex-col items-center text-center">
       <Icon className="w-10 h-10 mb-4" />
       <p className="text-gray-400 text-sm">{text}</p>
     </div>
