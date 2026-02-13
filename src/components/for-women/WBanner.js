@@ -7,18 +7,35 @@ export default function Wbanner() {
       aria-label="Women Banner"
       className="relative w-full h-[65vh] md:h-[80vh] overflow-hidden"
     >
-      <Image
-        src="/images/hero-desktop-1.jpg"
-        alt="For Women"
-        fill
-        priority   // 🔥 LCP FIX
-        sizes="100vw"
-        className="object-cover"
-      />
+      {/* 📱 MOBILE IMAGE */}
+      <div className="absolute inset-0 md:hidden">
+        <Image
+          src="/images/maria-1.jpg"   // <-- change later
+          alt="For Women"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover"
+        />
+      </div>
 
-      <div className="absolute inset-0 bg-black/40"></div>
+      {/* 💻 DESKTOP IMAGE */}
+      <div className="absolute inset-0 hidden md:block">
+        <Image
+          src="/images/hero-desktop-1.jpg"
+          alt="For Women"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover"
+        />
+      </div>
 
-      <div className="absolute bottom-8 left-6 md:bottom-12 md:left-12 text-white">
+      {/* OVERLAY */}
+      <div className="absolute inset-0 bg-black/40 z-[1]" />
+
+      {/* TEXT */}
+      <div className="absolute bottom-8 left-6 md:bottom-12 md:left-12 text-white z-[2]">
         <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold">
           For Women
         </h1>

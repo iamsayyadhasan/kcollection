@@ -111,7 +111,7 @@ export default function Footer() {
                 rel="noopener noreferrer"
                 className="hover:scale-110 transition"
               >
-                <img src="/Social/linkedin.svg" className="w-6 h-6 invert" />
+                <img src="/Media/linkedin.svg" className="w-6 h-6 invert" />
               </a>
             </div>
 
