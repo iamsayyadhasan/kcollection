@@ -275,6 +275,23 @@ export default function EditProductPage() {
               <option value="Unstitched">Unstitched</option>
             </select>
           )}
+            {/* PRICE */}
+        <input
+          type="number"
+          value={formData.price}
+          onChange={e=>setFormData({...formData,price:e.target.value})}
+          className="w-full border px-3 py-2"
+          placeholder="Price"
+        />
+
+        <input
+          type="number"
+          value={formData.mrp}
+          onChange={e=>setFormData({...formData,mrp:e.target.value})}
+          className="w-full border px-3 py-2"
+          placeholder="MRP"
+        />
+
 
           {/* SIZES */}
           {(gender === "Men" || stitchType === "Stitched") && (
