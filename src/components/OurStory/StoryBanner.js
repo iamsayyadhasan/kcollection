@@ -11,11 +11,11 @@ export default function StoryBanner() {
         <source media="(max-width: 767px)" srcSet="/images/storybanner.jpg" />
 
         {/* Desktop */}
-        <source media="(min-width: 768px)" srcSet="/social/img_0311.jpg" />
+        <source media="(min-width: 768px)" srcSet="/Media/img_0311.jpg" />
 
         {/* Fallback (ALWAYS KEEP SAME FOLDER FAMILY) */}
         <img
-          src="/social/img_0311.jpg"
+          src="/Media/img_0311.jpg"
           alt="Our Story"
           className="w-full h-full object-cover"
         />
