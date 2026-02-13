@@ -28,7 +28,7 @@ function Craft() {
           {/* Responsive image (same behavior as earlier section) */}
           <div className="relative w-full h-[280px] sm:h-[320px] lg:h-[380px] overflow-hidden">
             <img
-              src="/Social/Craft.WEBP"
+              src="/Media/Craft.WEBP"
               alt="Our Craft & Curation"
               className="absolute inset-0 w-full h-full object-cover"
             />

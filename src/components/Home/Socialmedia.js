@@ -3,11 +3,11 @@
 import { useEffect, useRef } from "react";
 
 const images = [
-  "/Social/social-1.jpg",
-  "/Social/social-2.jpg",
-  "/Social/social-3.jpg",
-  "/Social/social-4.jpg",
-  "/Social/social-5.jpg",
+  "/Media/social-1.jpg",
+  "/Media/social-2.jpg",
+  "/Media/social-3.jpg",
+  "/Media/social-4.jpg",
+  "/Media/social-5.jpg",
 ];
 
 export default function Socialmedia() {
@@ -42,7 +42,7 @@ export default function Socialmedia() {
       {/* TEXT */}
       <div className="max-w-3xl mx-auto text-center mb-14 px-4">
         <p className="text-sm uppercase tracking-widest text-gray-500 mb-3">
-          (Social)
+          (Socials)
         </p>
 
     <h2 className="text-3xl md:text-4xl lg:text-5xl font-semibold leading-tight text-gray-900">

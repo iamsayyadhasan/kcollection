@@ -11,10 +11,10 @@ export default function EBanner() {
         <source media="(max-width: 767px)" srcSet="/Social/Error-image.png" />
         <source
           media="(min-width: 768px)"
-          srcSet="/Social/Error-image.png"
+          srcSet="/Media/Error-image.png"
         />
         <img
-           srcSet="/Social/Error-image.png"
+           srcSet="/Media/Error-image.png"
           alt="Error"
           className="w-full h-full object-cover"
         />
